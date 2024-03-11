@@ -42,13 +42,35 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype.split("/")[0] === "image") {
     cb(null, true);
   } else {
-    cb(new Error("file is not of the correct type"), false);
+    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
   }
 };
 
-const upload1 = multer({ storage, fileFilter });
+const upload1 = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 100000, files: 2 },
+});
 app.post("/upload", upload1.array("file"), (req, res) => {
   res.json({ status: "success" });
+});
+
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === "LIMIT_FILE_SIZE") {
+      return res.json({
+        message: "file is too large",
+      });
+    }
+
+    if (error.code === "LIMIT_FILE_COUNT") {
+      return res.json({ message: "File limit reached" });
+    }
+
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.status(400).json({ message: "File must be of image" });
+    }
+  }
 });
 
 app.listen(4000, () => {
