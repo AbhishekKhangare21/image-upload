@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
-const { s3Uploadv2 } = require("./s3Service");
+const { s3Uploadv2, s3Uploadv3 } = require("./s3Service");
 const uuid = require("uuid").v4;
 const app = express();
 
@@ -60,13 +60,24 @@ app.get("/", (req, res) => {
   res.json({ msg: "msg" });
 });
 
+// app.post("/upload", upload1.array("file"), async (req, res) => {
+//   try {
+//     const results = await s3Uploadv2(req.files);
+//     console.log(results);
+//     res.json({ status: "success" });
+//   } catch (error) {
+//     console.log("err ==>", error);
+//   }
+// });
+
 app.post("/upload", upload1.array("file"), async (req, res) => {
+  const file = req.files[0];
   try {
-    const results = await s3Uploadv2(req.files);
+    const results = await s3Uploadv3(file);
     console.log(results);
     res.json({ status: "success" });
   } catch (error) {
-    console.log("err ==>", error);
+    console.log("errv3n ==>", error);
   }
 });
 

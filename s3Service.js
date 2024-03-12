@@ -1,4 +1,5 @@
 const { S3 } = require("aws-sdk");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const uuid = require("uuid").v4;
 
 exports.s3Uploadv2 = async (files) => {
@@ -13,4 +14,17 @@ exports.s3Uploadv2 = async (files) => {
   });
 
   return await Promise.all(params.map((param) => s3.upload(param).promise()));
+};
+
+// sdk3 with one file
+exports.s3Uploadv3 = async (file) => {
+  const s3client = new S3Client();
+
+  const param = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `uploads/${uuid()}-${file.originalname}`,
+    Body: file.buffer,
+  };
+
+  return s3client.send(new PutObjectCommand(param));
 };
