@@ -17,7 +17,7 @@ const s3Client = new S3Client({
 
 async function getObjectURL(key) {
   const command = new GetObjectCommand({
-    Bucket: "bucket.piyushgarg.new",
+    Bucket: "bucket.piyush.private",
     Key: key,
   });
   const url = await getSignedUrl(s3Client, command);
@@ -26,7 +26,7 @@ async function getObjectURL(key) {
 
 async function putObject(filename, contentType) {
   const command = new PutObjectCommand({
-    Bucket: "bucket.piyushgarg.new",
+    Bucket: "bucket.piyush.private",
     Key: `uploads/user-uploads/${filename}`,
     ContentType: contentType,
   });
@@ -35,7 +35,7 @@ async function putObject(filename, contentType) {
 }
 async function listObjects() {
   const command = new ListObjectsV2Command({
-    Bucket: "bucket.piyushgarg.new",
+    Bucket: "bucket.piyush.private",
     key: "/",
   });
 
@@ -45,21 +45,24 @@ async function listObjects() {
 
 async function init() {
   // console.log(await listObjects());
-  // console.log("URL for boy.jpg", await getObjectURL("images/48.webp"));
+  console.log(
+    "URL for boy.jpg",
+    await getObjectURL("uploads/user-uploads/3.webp")
+  );
   // console.log(
   //   "URL for boy.jpg",
   //   await getObjectURL("uploads/user-uploads/video-1710319338135.mp4")
   // );
-  console.log(
-    "URL for uploading",
-    await putObject(`image-${Date.now()}.jpeg`, `images/jpeg`)
-  );
+  // console.log(
+  //   "URL for uploading",
+  //   await putObject(`image-${Date.now()}.jpeg`, `images/jpeg`)
+  // );
   //   console.log(
   //     "URL for uploading",
   //     await putObject(`video-${Date.now()}.mp4`, `video/mp4`)
   //   );
   //   const cmd = new DeleteObjectCommand({
-  //     Bucket: "bucket.piyushgarg.new",
+  //     Bucket: "bucket.piyush.private",
   //     Key: "49.webp",
   //   });
   //   await s3Client.send(cmd);
