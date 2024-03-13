@@ -14,7 +14,7 @@ async function getObjectURL(key) {
     Bucket: "bucket.piyush.private",
     Key: key,
   });
-  const url = await getSignedUrl(s3Client, command);
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 20 });
   return url;
 }
 
