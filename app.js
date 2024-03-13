@@ -33,13 +33,22 @@ async function putObject(filename, contentType) {
   const url = await getSignedUrl(s3Client, command);
   return url;
 }
+async function listObjects() {
+  const command = new ListObjectsV2Command({
+    Bucket: "bucket.piyush.private",
+    key: "/",
+  });
+
+  const result = await s3Client.send(command);
+  console.log("result ==>", result);
+}
 
 async function init() {
-  // await listObjects();
-  //   console.log(
-  //     "URL for boy.jpg",
-  //     await getObjectURL("uploads/user-uploads/video-1710333037567.mp4")
-  //   );
+  // console.log(await listObjects());
+  console.log(
+    "URL for boy.jpg",
+    await getObjectURL("uploads/user-uploads/3.webp")
+  );
   // console.log(
   //   "URL for boy.jpg",
   //   await getObjectURL("uploads/user-uploads/video-1710319338135.mp4")
